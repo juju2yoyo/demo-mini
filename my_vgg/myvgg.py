@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from utils import load_state_dict_from_url
+from my_vgg.utils import load_state_dict_from_url
 
 
 __all__ = ['VGG', 'vgg11', 'vgg11_bn', 'vgg16', 'vgg16_bn', 'vgg19', 'vgg19_bn']

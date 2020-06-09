@@ -1,5 +1,5 @@
 import torch
-from myvgg import vgg16
+from my_vgg.myvgg import vgg16
 model = vgg16
 model.eval()
 
