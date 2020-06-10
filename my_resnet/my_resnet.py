@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.hub import load_state_dict_from_url
 
-__all__ = ['ResNet', 'resnet152']
+__all__ = ['ResNet', 'resnet101', 'resnet152']
 
 model_urls = {
   'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
@@ -139,6 +139,10 @@ def _resnet(arch, block, layers, pretrained, progress, **kwargs):
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
+
+
+def resnet101(pretrained=False, progress=True, **kwargs):
+  return _resnet('resnet101', Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs)
 
 
 def resnet152(pretrained=False, progress=True, **kwargs):
