@@ -1,21 +1,13 @@
 import torch
-from my_vgg.myvgg import vgg16
-model = vgg16
+from myvgg import vgg16
+model = vgg16()
+
 model.eval()
-
-# Download an example image from the pytorch website
-import urllib
-url, filename = ("https://github.com/pytorch/hub/raw/master/dog.jpg", "dog.jpg")
-try:
-    urllib.URLopener().retrieve(url, filename)
-except Exception:
-    urllib.request.urlretrieve(url, filename)
-
-
 
 # sample execution (requires torchvision)
 from PIL import Image
 from torchvision import transforms
+filename = 'dog.jpg'
 input_image = Image.open(filename)
 preprocess = transforms.Compose([
     transforms.Resize(256),
@@ -35,5 +27,6 @@ with torch.no_grad():
     output = model(input_batch)
 # Tensor of shape 1000, with confidence scores over Imagenet's 1000 classes
 print(output[0])
+
 # The output has unnormalized scores. To get probabilities, you can run a softmax on it.
 print(torch.nn.functional.softmax(output[0], dim=0))

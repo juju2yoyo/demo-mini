@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from my_vgg.utils import load_state_dict_from_url
+from torch.hub import load_state_dict_from_url
 
 
 __all__ = ['VGG', 'vgg11', 'vgg11_bn', 'vgg16', 'vgg16_bn', 'vgg19', 'vgg19_bn']
@@ -35,7 +35,7 @@ class VGG(nn.Module):
     def forward(self, x):
         x = self.features(x)
         x = self.avgpool(x)
-        x = torch.faltten(x, 1)
+        x = torch.flatten(x, 1)
         x = self.classifier(x)
         return x
 
@@ -53,19 +53,19 @@ class VGG(nn.Module):
                 nn.init.constant_(m.bias, 0)
 
 
-def make_layers(cfgs, batch_norm=False):
+def make_layers(cfg, batch_norm=False):
     layers = []
     in_channels = 3
-    for cfg in cfgs:
-        if cfg == 'M':
+    for v in cfg:
+        if v == 'M':
             layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
         else:
-            conv2d = nn.Conv2d(in_channels, cfg, kernel_size=3, padding=1)
+            conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=1)
             if batch_norm:
-                layers += [conv2d, nn.BatchNorm2d(cfg), nn.ReLU(inplace=True)]
+                layers += [conv2d, nn.BatchNorm2d(v), nn.ReLU(inplace=True)]
             else:
                 layers += [conv2d, nn.ReLU(inplace=True)]
-        in_channels = cfg
+            in_channels = v
     return nn.Sequential(*layers)
 
 
@@ -94,12 +94,12 @@ def vgg11_bn():
     pass
 
 
-def vgg16(pretrainde=False, progress=True, **kwargs):
-    return _vgg('vgg16', 'D', False, pretrainde, progress, **kwargs)
+def vgg16(pretrained=False, progress=True, **kwargs):
+    return _vgg('vgg16', 'D', False, pretrained, progress, **kwargs)
 
 
-def vgg16_bn(pretrainde=False, progress=True, **kwargs):
-    return _vgg('vgg16', 'D', True, pretrainde, progress, **kwargs)
+def vgg16_bn(pretrained=False, progress=True, **kwargs):
+    return _vgg('vgg16', 'D', True, pretrained, progress, **kwargs)
 
 
 def vgg19():
